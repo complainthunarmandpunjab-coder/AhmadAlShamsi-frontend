@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #F7F4ED;
+  --color-paper: #FFFEFA;
+  --color-ink: #102A38;
+  --color-ink-soft: #27414D;
+  --color-gold: #A8874D;
+  --color-gold-light: #D4BD8B;
+  --color-stone: #E5E0D6;
+  --color-muted: #68757A;
+  --color-success: #287A57;
+  --color-error: #B33A35;
+  --font-heading: "Cormorant Garamond", Georgia, serif;
+  --font-body: "DM Sans", Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+  }
+}
+
+@layer utilities {
+  .text-display {
+    font-size: clamp(2.35rem, 5vw, 4.5rem);
+    line-height: 1;
+  }
+  .text-h1 {
+    font-size: clamp(2.1rem, 4.2vw, 3.75rem);
+    line-height: 1.05;
+  }
+  .text-h2 {
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    line-height: 1.1;
+  }
+  .text-h3 {
+    font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+    line-height: 1.2;
+  }
+  .text-body {
+    font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+    line-height: 1.6;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
