@@ -1,5 +1,5 @@
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 
 export default function Contact() {
   return (

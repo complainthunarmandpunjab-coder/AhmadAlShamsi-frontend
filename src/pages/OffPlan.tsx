@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar, Building, CreditCard } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 
 export default function OffPlan() {
   return (

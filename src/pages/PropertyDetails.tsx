@@ -1,11 +1,9 @@
-import { useParams, Link } from 'react-router-dom';
-import { MapPin, Bed, Layers, Home as HomeIcon, Check, ArrowLeft, ArrowRight, Share2, Heart, Phone, Mail, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { MapPin, Bed, Layers, Check, ArrowLeft, ArrowRight, Share2, Heart, Phone, Mail, Calendar } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 
 export default function PropertyDetails() {
-  const { id } = useParams();
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const isAr = i18n.language === 'ar';
 
   return (

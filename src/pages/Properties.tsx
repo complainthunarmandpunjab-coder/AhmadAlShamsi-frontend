@@ -1,4 +1,4 @@
-import { MapPin, Home as HomeIcon, Bed, DollarSign, Filter, Search } from 'lucide-react';
+import { MapPin, Home as HomeIcon, Bed, Filter, Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 

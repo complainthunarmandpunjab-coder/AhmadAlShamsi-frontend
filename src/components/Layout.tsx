@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Phone, X, Menu, Globe } from 'lucide-react';
+import { Phone, X, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
