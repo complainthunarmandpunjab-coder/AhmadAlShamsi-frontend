@@ -1,17 +1,48 @@
-import { MapPin, Home as HomeIcon, Bed, Layers, ArrowRight, ArrowLeft, Maximize2 } from 'lucide-react';
+import { MapPin, Home as HomeIcon, Bed, Layers, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import RentalServicesSection from '../components/RentalServicesSection';
+import TeamSection from '../components/TeamSection';
+import GoogleTestimonials from '../components/GoogleTestimonials';
 
 const communitiesData = [
-  { name: 'Maryam Island', img: '/Golden Hour Waterfront Promenade.png' },
-  { name: 'Al Khan', img: '/Golden-Hour Waterfront Skyline.png' },
-  { name: 'Al Khalidiya', img: '/hero.png' },
-  { name: 'Al Mamzar', img: '/Golden Hour Waterfront Promenade.png' },
-  { name: 'Al Nahda', img: '/Golden-Hour Waterfront Skyline.png' },
-  { name: 'Aljada', img: '/hero.png' },
-  { name: 'Masaar', img: '/Golden Hour Waterfront Promenade.png' },
+  { 
+    name: 'Maryam Island', 
+    nameAr: 'جزيرة مريم', 
+    img: '/Golden Hour Waterfront Promenade.png',
+    highlightEn: 'Waterfront promenade living with boutique dining and pristine beachfront views.',
+    highlightAr: 'إطلالة مائية ساحرة مع ممشى للتنزه، مقاهي ومطاعم شاطئية راقية.'
+  },
+  { 
+    name: 'Aljada', 
+    nameAr: 'الجادة', 
+    img: '/hero.png',
+    highlightEn: 'Sharjah’s largest progressive lifestyle city featuring modern architecture & parks.',
+    highlightAr: 'أكبر مدينة عصرية متكاملة في الشارقة تضم مراكز ترفيهية، مدارس وحدائق.'
+  },
+  { 
+    name: 'Masaar', 
+    nameAr: 'مسار', 
+    img: '/Golden-Hour Waterfront Skyline.png',
+    highlightEn: 'Lush forested master community with 50,000+ trees and dedicated cycling tracks.',
+    highlightAr: 'مجتمع سكني محاط بأكثر من 50 ألف شجرة ومسارات رياضية هادئة لعشاق الطبيعة.'
+  },
+  { 
+    name: 'Al Khan', 
+    nameAr: 'الخان', 
+    img: '/Golden-Hour Waterfront Skyline.png',
+    highlightEn: 'Historic lagoons, maritime heritage, and premium residential waterfront towers.',
+    highlightAr: 'موقع حيوي يجمع بين التراث البحري وأبراج سكنية بإطلالات بحرية خلابة.'
+  },
+  { 
+    name: 'Al Mamzar', 
+    nameAr: 'الممزر', 
+    img: '/Golden Hour Waterfront Promenade.png',
+    highlightEn: 'Bordering Dubai with immediate highway access and serene lagoon shorelines.',
+    highlightAr: 'موقع استراتيجي على حدود دبي مع إطلالات بحرية هادئة وسهولة تنقل فائقة.'
+  },
 ];
 
 export default function HomePage() {
@@ -19,10 +50,8 @@ export default function HomePage() {
   const isAr = i18n.language === 'ar';
   
   const [activeCommIdx, setActiveCommIdx] = useState(0);
+  const [searchTab, setSearchTab] = useState<'BUY' | 'RENT' | 'OFF-PLAN'>('BUY');
   const activeComm = communitiesData[activeCommIdx];
-
-  const handleNextComm = () => setActiveCommIdx((prev) => (prev + 1) % communitiesData.length);
-  const handlePrevComm = () => setActiveCommIdx((prev) => (prev === 0 ? communitiesData.length - 1 : prev - 1));
 
   return (
     <div className="bg-ivory overflow-x-hidden">
@@ -30,7 +59,7 @@ export default function HomePage() {
       <section className="relative w-full h-[600px] md:h-[700px] flex flex-col justify-center">
         <div className="absolute inset-0 z-0">
           <img src="/hero.png" alt="Sharjah Skyline" className="w-full h-full object-cover object-center" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ivory via-ivory/80 to-transparent w-full md:w-3/4"></div>
+          <div className={`absolute inset-0 ${isAr ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-ivory via-ivory/80 to-transparent w-full md:w-3/4`}></div>
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ivory to-transparent"></div>
         </div>
 
@@ -44,34 +73,66 @@ export default function HomePage() {
             {t('hero.subtitle')}
           </p>
           
-          <div className="flex flex-col gap-3 w-full max-w-[320px]">
-            <button className="w-full bg-ink text-white px-5 py-3.5 flex items-center justify-between hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm">
-              <span>{t('hero.explore')}</span> <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
-            </button>
-            <button className="w-full border border-ink/40 bg-transparent text-ink px-5 py-3.5 flex items-center justify-between hover:bg-ink hover:text-white transition-colors font-medium text-sm rounded-md backdrop-blur-sm">
-              <span>{t('hero.speak')}</span> <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
-            </button>
+          {/* Functional Buttons with Router Links */}
+          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[400px]">
+            <Link 
+              to="/properties" 
+              className="w-full bg-ink text-white px-5 py-3.5 flex items-center justify-between hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm"
+            >
+              <span>{t('hero.explore')}</span> 
+              <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
+            </Link>
+            <Link 
+              to="/contact" 
+              className="w-full border border-ink/40 bg-paper/60 backdrop-blur-md text-ink px-5 py-3.5 flex items-center justify-between hover:bg-ink hover:text-white transition-colors font-medium text-sm rounded-md"
+            >
+              <span>{t('hero.speak')}</span> 
+              <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Search Box - Absolute on Desktop, Relative overlapping on Mobile */}
+      {/* Search Box */}
       <div className="relative z-20 px-4 md:px-16 -mt-8 md:-mt-20 max-w-6xl mx-auto">
         <div className="bg-paper rounded-lg shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] border border-stone/30 overflow-hidden">
           <div className="flex border-b border-stone/50 px-2 md:px-6">
-            <button className="px-4 py-4 text-xs font-bold uppercase tracking-widest border-b-[3px] border-gold text-ink">BUY</button>
-            <button className="px-4 py-4 text-xs font-bold uppercase tracking-widest border-b-[3px] border-transparent text-muted hover:text-ink transition-colors">RENT</button>
-            <button className="px-4 py-4 text-xs font-bold uppercase tracking-widest border-b-[3px] border-transparent text-muted hover:text-ink transition-colors">OFF-PLAN</button>
+            <button 
+              onClick={() => setSearchTab('BUY')}
+              className={`px-4 py-4 text-xs font-bold uppercase tracking-widest border-b-[3px] transition-colors ${
+                searchTab === 'BUY' ? 'border-gold text-ink' : 'border-transparent text-muted hover:text-ink'
+              }`}
+            >
+              {t('search.buy')}
+            </button>
+            <button 
+              onClick={() => setSearchTab('RENT')}
+              className={`px-4 py-4 text-xs font-bold uppercase tracking-widest border-b-[3px] transition-colors ${
+                searchTab === 'RENT' ? 'border-gold text-ink' : 'border-transparent text-muted hover:text-ink'
+              }`}
+            >
+              {t('search.rent')}
+            </button>
+            <button 
+              onClick={() => setSearchTab('OFF-PLAN')}
+              className={`px-4 py-4 text-xs font-bold uppercase tracking-widest border-b-[3px] transition-colors ${
+                searchTab === 'OFF-PLAN' ? 'border-gold text-ink' : 'border-transparent text-muted hover:text-ink'
+              }`}
+            >
+              {t('search.offPlan')}
+            </button>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-stone/50">
             <div className="p-4 md:p-6 flex items-start gap-3 border-b border-stone/50 md:border-b-0">
               <MapPin className="text-ink shrink-0 mt-0.5" size={18} strokeWidth={1.5} />
               <div className="w-full">
-                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">Location</label>
+                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">{t('search.location')}</label>
                 <select className="w-full bg-transparent text-xs text-muted outline-none appearance-none cursor-pointer">
-                  <option>Select Location</option>
+                  <option>{t('search.selectLocation')}</option>
                   <option>Maryam Island</option>
+                  <option>Aljada</option>
+                  <option>Masaar</option>
                   <option>Al Khan</option>
                 </select>
               </div>
@@ -80,11 +141,12 @@ export default function HomePage() {
             <div className="p-4 md:p-6 flex items-start gap-3 border-b border-stone/50 md:border-b-0">
               <HomeIcon className="text-ink shrink-0 mt-0.5" size={18} strokeWidth={1.5} />
               <div className="w-full">
-                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">Property Type</label>
+                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">{t('search.propertyType')}</label>
                 <select className="w-full bg-transparent text-xs text-muted outline-none appearance-none cursor-pointer">
-                  <option>Select type</option>
+                  <option>{t('search.selectType')}</option>
                   <option>Apartment</option>
                   <option>Villa</option>
+                  <option>Townhouse</option>
                 </select>
               </div>
             </div>
@@ -92,11 +154,12 @@ export default function HomePage() {
             <div className="p-4 md:p-6 flex items-start gap-3">
               <Bed className="text-ink shrink-0 mt-0.5" size={18} strokeWidth={1.5} />
               <div className="w-full">
-                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">Bedrooms</label>
+                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">{t('search.bedrooms')}</label>
                 <select className="w-full bg-transparent text-xs text-muted outline-none appearance-none cursor-pointer">
                   <option>Any</option>
                   <option>1 Bed</option>
                   <option>2 Beds</option>
+                  <option>3+ Beds</option>
                 </select>
               </div>
             </div>
@@ -104,53 +167,63 @@ export default function HomePage() {
             <div className="p-4 md:p-6 flex items-start gap-3">
               <Layers className="text-ink shrink-0 mt-0.5" size={18} strokeWidth={1.5} />
               <div className="w-full">
-                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">Price</label>
+                <label className="text-[10px] uppercase tracking-widest text-ink font-semibold mb-0.5 block">{t('search.price')}</label>
                 <select className="w-full bg-transparent text-xs text-muted outline-none appearance-none cursor-pointer">
                   <option>Any</option>
-                  <option>Under 1M</option>
-                  <option>1M - 3M</option>
+                  <option>{searchTab === 'RENT' ? 'AED 35k - 60k/yr' : 'Under 1M AED'}</option>
+                  <option>{searchTab === 'RENT' ? 'AED 60k - 100k/yr' : '1M - 2.5M AED'}</option>
                 </select>
               </div>
             </div>
           </div>
           
           <div className="p-4 bg-paper border-t border-stone/50 md:border-none md:pt-0">
-            <button className="w-full bg-ink text-white py-3.5 flex items-center justify-center gap-3 hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm">
-              Search Properties <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
-            </button>
+            <Link 
+              to="/properties" 
+              className="w-full bg-ink text-white py-3.5 flex items-center justify-center gap-3 hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm"
+            >
+              <span>{t('search.searchBtn')}</span> 
+              <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Communities Section */}
+      {/* Rental Services Highlight Section (Requirement #1) */}
+      <RentalServicesSection />
+
+      {/* Communities Section (Requirement #5 with unique highlights) */}
       <section className="px-6 lg:px-16 pt-16 md:pt-24 pb-16 bg-ivory">
         <div className="flex flex-col lg:flex-row gap-6 md:gap-12 max-w-6xl mx-auto">
           <div className="lg:w-1/3">
             <div className="flex items-center gap-4 mb-3">
               <div className="w-8 h-[2px] bg-gold"></div>
-              <div className="text-[9px] uppercase tracking-widest text-gold font-bold">The places we know</div>
+              <div className="text-[9px] uppercase tracking-widest text-gold font-bold">{t('communities.tag')}</div>
             </div>
-            <h2 className="text-[2rem] md:text-h2 leading-[1.1] font-heading text-ink mb-6">COMMUNITIES<br />WE CALL HOME.</h2>
+            <h2 
+              className="text-[2rem] md:text-h2 leading-[1.1] font-heading text-ink mb-6"
+              dangerouslySetInnerHTML={{ __html: t('communities.title') }}
+            />
             
             <div className="flex flex-col border-t border-stone/40">
               {communitiesData.map((comm, idx) => (
                 <button 
                   key={comm.name}
                   onClick={() => setActiveCommIdx(idx)}
-                  className={`w-full text-left py-3.5 border-b border-stone/40 font-medium transition-colors text-sm ${
+                  className={`w-full ${isAr ? 'text-right' : 'text-left'} py-3.5 border-b border-stone/40 font-medium transition-colors text-sm ${
                     activeCommIdx === idx 
-                      ? 'border-l-4 border-l-gold pl-3 text-ink font-bold bg-stone/20' 
-                      : 'pl-4 text-ink hover:text-gold'
+                      ? `${isAr ? 'border-r-4 border-r-gold pr-3' : 'border-l-4 border-l-gold pl-3'} text-ink font-bold bg-stone/20` 
+                      : `${isAr ? 'pr-4' : 'pl-4'} text-ink hover:text-gold`
                   }`}
                 >
-                  {comm.name}
+                  {isAr ? comm.nameAr : comm.name}
                 </button>
               ))}
             </div>
           </div>
           
           <div className="lg:w-2/3 flex flex-col gap-3">
-            <div className="relative h-[220px] md:h-[400px] w-full rounded-lg overflow-hidden group">
+            <div className="relative h-[240px] md:h-[400px] w-full rounded-lg overflow-hidden group shadow-md">
               <AnimatePresence mode="wait">
                 <motion.img 
                   key={activeComm.img}
@@ -163,39 +236,17 @@ export default function HomePage() {
                   className="w-full h-full object-cover"
                 />
               </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent"></div>
-              
-              <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white">
-                <MapPin size={18} />
-                <span className="font-medium text-sm">{activeComm.name}</span>
-              </div>
-              <div className="absolute bottom-4 right-4 flex gap-4 text-white">
-                <button onClick={handlePrevComm} className="hover:text-gold transition-colors"><ArrowLeft size={20} /></button>
-                <button onClick={handleNextComm} className="hover:text-gold transition-colors"><ArrowRight size={20} /></button>
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent flex flex-col justify-end p-6 text-white">
+                <div className="text-2xl font-heading mb-1">{isAr ? activeComm.nameAr : activeComm.name}</div>
+                <p className="text-xs text-white/90 max-w-md">{isAr ? activeComm.highlightAr : activeComm.highlightEn}</p>
               </div>
             </div>
             
-            <div className="relative h-[200px] md:h-[250px] w-full rounded-lg overflow-hidden border border-stone/40 bg-stone">
-              <iframe
-                title={`Map of ${activeComm.name}`}
-                src={`https://maps.google.com/maps?q=${encodeURIComponent(activeComm.name + ' Sharjah')}&t=m&z=14&ie=UTF8&iwloc=&output=embed`}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen={false}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0"
-              ></iframe>
-              <a 
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeComm.name + ' Sharjah')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={`Open ${activeComm.name} in Google Maps`}
-                className="absolute bottom-4 right-4 text-ink p-2 bg-white/90 backdrop-blur-md shadow-lg rounded-md hover:bg-white hover:scale-105 hover:text-gold transition-all z-10"
-              >
-                <Maximize2 size={18} strokeWidth={2} />
-              </a>
+            <div className="flex items-center justify-between pt-2">
+              <Link to="/communities" className="text-xs font-semibold text-ink hover:text-gold flex items-center gap-1.5 transition-colors">
+                <span>{t('communities.exploreIn')} {isAr ? activeComm.nameAr : activeComm.name}</span>
+                <ArrowRight size={14} className={isAr ? 'rotate-180' : ''} />
+              </Link>
             </div>
           </div>
         </div>
@@ -211,92 +262,56 @@ export default function HomePage() {
           <div className="w-full lg:w-1/2 flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-6 h-[2px] bg-gold"></div>
-              <div className="text-[9px] uppercase tracking-widest text-gold font-bold">Featured Property</div>
+              <div className="text-[9px] uppercase tracking-widest text-gold font-bold">{t('featured.tag')}</div>
             </div>
             
-            <h3 className="text-2xl md:text-3xl font-heading text-ink mb-4">Maryam Island Residence</h3>
+            <h3 className="text-2xl md:text-3xl font-heading text-ink mb-4">
+              {isAr ? "شقة سكنية بإطلالة بحرية في جزيرة مريم" : "Maryam Island Residence"}
+            </h3>
             
             <div className="flex items-center gap-4 text-xs text-ink-soft mb-4">
-              <div className="flex items-center gap-1.5"><MapPin size={14} className="text-ink" /> Maryam Island</div>
+              <div className="flex items-center gap-1.5"><MapPin size={14} className="text-ink" /> {isAr ? "جزيرة مريم" : "Maryam Island"}</div>
               <div className="w-px h-3 bg-stone"></div>
-              <div className="flex items-center gap-1.5"><HomeIcon size={14} className="text-ink" /> Apartment</div>
+              <div className="flex items-center gap-1.5"><HomeIcon size={14} className="text-ink" /> {isAr ? "شقة" : "Apartment"}</div>
             </div>
             
             <div className="flex items-center gap-5 text-xs text-ink-soft mb-6 pb-6 border-b border-stone/50">
-              <div className="flex items-center gap-1.5"><Bed size={16} className="text-ink" /> 2 Bed</div>
-              <div className="flex items-center gap-1.5">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink"><path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M10 5h5.5c.83 0 1.5.67 1.5 1.5v4"/><path d="M7 19v2"/><path d="M17 19v2"/></svg>
-                2 Bath
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Layers size={16} className="text-ink" /> 1,350 sq ft
-              </div>
+              <div className="flex items-center gap-1.5"><Bed size={16} className="text-ink" /> 2 {isAr ? "غرف" : "Bed"}</div>
+              <div className="flex items-center gap-1.5"><Layers size={16} className="text-ink" /> 1,350 {t('featured.sqft')}</div>
             </div>
             
             <div className="text-xl md:text-2xl font-bold text-ink mb-6">AED 1,850,000</div>
             
-            <Link to="/property/maryam-island-residence" className="w-full md:w-auto bg-ink text-white px-8 py-3.5 flex items-center justify-between md:justify-center gap-3 hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm text-center">
-              <span>View Property</span> <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
+            <Link to="/properties" className="w-full md:w-auto bg-ink text-white px-8 py-3.5 flex items-center justify-between md:justify-center gap-3 hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm text-center">
+              <span>{t('featured.viewProperty')}</span> <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="px-6 lg:px-16 py-12 bg-ivory">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-[2px] bg-gold"></div>
-              <div className="text-[9px] uppercase tracking-widest text-ink font-bold">What our clients say</div>
-            </div>
-            <div className="flex items-center gap-3">
-              <button className="text-ink hover:text-gold transition-colors"><ArrowLeft size={16} /></button>
-              <button className="text-ink hover:text-gold transition-colors"><ArrowRight size={16} /></button>
-            </div>
-          </div>
-          
-          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pb-4 -mx-6 px-6 md:mx-0 md:px-0">
-            {[
-              { name: "Sarah Khan", role: "Buyer", text: '"Professional, transparent and genuinely helpful. Ahmed Al Shamsi made the entire process smooth and stress-free."' },
-              { name: "Ahmed Raza", role: "Investor", text: '"Excellent local knowledge and honest advice. We found the perfect home in Maryam Island with their guidance."' },
-              { name: "Fatima Al Mansoori", role: "Owner", text: '"Their team truly understands Sharjah. We felt supported at every step."' }
-            ].map((t, index) => (
-              <div key={index} className="min-w-[280px] md:min-w-[320px] snap-center bg-paper p-6 border border-stone/30 rounded-lg shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-stone rounded-full overflow-hidden shrink-0">
-                    <img src={`https://ui-avatars.com/api/?name=${t.name.replace(' ', '+')}&background=102A38&color=fff`} alt={t.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex gap-0.5 text-gold">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    ))}
-                  </div>
-                </div>
-                <p className="text-ink-soft text-[13px] mb-6 leading-relaxed font-medium">{t.text}</p>
-                <div>
-                  <div className="text-xs font-bold text-ink">{t.name}</div>
-                  <div className="text-[10px] text-muted">{t.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Meet The Team Section (Requirement #2) */}
+      <TeamSection />
 
-      {/* CTA Footer Block */}
-      <section className="relative h-[250px] w-full flex items-center justify-center lg:justify-start px-6 lg:px-16 mt-8">
+      {/* Google Testimonials (Requirement #3) */}
+      <GoogleTestimonials />
+
+      {/* CTA Footer Block with Working Link (Requirement #6) */}
+      <section className="relative h-[260px] w-full flex items-center justify-center lg:justify-start px-6 lg:px-16 mt-8">
         <div className="absolute inset-0 z-0">
           <img src="/footer.png" alt="Skyline" className="w-full h-full object-cover object-bottom" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ivory/95 via-ivory/80 to-transparent w-full md:w-2/3"></div>
+          <div className={`absolute inset-0 ${isAr ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-ivory/95 via-ivory/80 to-transparent w-full md:w-2/3`}></div>
         </div>
         
         <div className="relative z-10 max-w-xl text-center lg:text-left w-full">
-          <h2 className="text-3xl md:text-display font-heading text-ink mb-2">MAKE SHARJAH HOME.</h2>
-          <p className="text-body text-ink-soft mb-6 text-sm">Your next chapter starts with local knowledge.</p>
-          <button className="mx-auto lg:mx-0 bg-ink text-white px-6 py-3.5 flex items-center justify-between w-full md:w-fit gap-4 hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm">
-            <span>Speak With an Advisor</span> <ArrowRight size={16} />
-          </button>
+          <h2 className="text-3xl md:text-display font-heading text-ink mb-2">{t('footer.ctaTitle')}</h2>
+          <p className="text-body text-ink-soft mb-6 text-sm">{t('footer.ctaSub')}</p>
+          <Link 
+            to="/contact" 
+            className="mx-auto lg:mx-0 bg-ink text-white px-6 py-3.5 flex items-center justify-between w-full md:w-fit gap-4 hover:bg-ink-soft transition-colors font-medium text-sm rounded-md shadow-sm"
+          >
+            <span>{t('hero.speak')}</span> 
+            <ArrowRight size={16} className={isAr ? 'rotate-180' : ''} />
+          </Link>
         </div>
       </section>
     </div>
